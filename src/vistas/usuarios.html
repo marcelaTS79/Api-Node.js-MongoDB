@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <img src="/LOGO STEIR.png" alt="Logo" class="logo">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <div id="mensaje"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                })
+            }).then(response => response.json())
+              .then(data => {
+                const mensajeDiv = document.getElementById('mensaje');
+                if (data.success) {
+                    mensajeDiv.innerHTML = 'Inicio de sesión exitoso. Redirigiendo...';
+                    setTimeout(() => {
+                        window.location.href = '/success.html';
+                    }, 2000);
+                } else {
+                    mensajeDiv.innerHTML = 'Error en el inicio de sesión. Redirigiendo al registro...';
+                    setTimeout(() => {
+                        window.location.href = '/registro.html';
+                    }, 2000);
+                }
+              });
+        });
+    </script>
+</body>
+</html>
